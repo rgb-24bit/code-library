@@ -1,0 +1,72 @@
+#+TITLE: Code snippet collection
+
+* Table of Contents                                       :TOC_4_gh:noexport:
+- [[#integer-calculation-correlation][Integer calculation correlation]]
+- [[#pointer-operation-related][Pointer operation related]]
+
+* Integer calculation correlation
+  + Judging whether an unsigned add operation overflows.
+    #+BEGIN_SRC C
+      bool uint_add_is_overflow(unsigned x, unsigned y) {
+        unsigned u_max = ~0u;
+        return (x + y) < x;
+      }
+    #+END_SRC
+
+  + Judging whether signed addition is overflowing.
+    #+BEGIN_SRC C
+      bool int_add_is_overflow(int x, int y) {
+        if (x > 0 && y > 0) {
+          return (x + y) <= 0;
+        }
+
+        if (x < 0 && y < 0) {
+          return (x + y) >= 0;
+        }
+
+        return false;
+      }
+    #+END_SRC
+
+  + Divide by the power of two, result rounded down.
+    #+BEGIN_SRC C
+      int divide_by_power_of_two(int x, int power, bool round_up) {
+        return res = x >> power;
+      }
+    #+END_SRC
+
+  + Divide by the power of two, result rounded up.
+    #+BEGIN_SRC C
+      int divide_by_power_of_two(int x, int power, bool round_up) {
+        return res = (x + (1 << power) - 1) >> power;
+      }
+    #+END_SRC
+
+* Pointer operation related
+  + Get the byte distribution of the specified variable in memory.
+    #+BEGIN_SRC C
+      typedef unsigned char* byte_pointer;
+
+      void show_bytes(byte_pointer start, size_t len) {
+        for (size_t i = 0; i < len; ++i) {
+          printf("%p %.2x\n", &start[i], start[i]);
+        }
+      }
+    #+END_SRC
+
+    Use like this:
+    #+BEGIN_SRC C
+      int main(int argc, char* argv[]) {
+        int i_num = 0x01234567;
+        float f_num = 0x01234567f;
+
+        printf("%p\n", &i_num);
+        show_bytes((byte_pointer)&i_num, sizeof(int));
+
+        printf("%p\n", &f_num);
+        show_bytes((byte_pointer)&f_num, sizeof(float));
+
+        return 0;
+      }
+    #+END_SRC
+
