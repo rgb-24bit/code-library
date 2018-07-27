@@ -1,0 +1,21 @@
+#+TITLE: Code snippet collection
+
+* Table of Contents                                       :TOC_4_gh:noexport:
+- [[#text-style][Text style]]
+
+* Text style
+  + Single line text overflow shows ellipsis.
+    #+BEGIN_SRC css
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    #+END_SRC
+
+  + Multi-line text overflow showing ellipsis.
+    #+BEGIN_SRC css
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+    #+END_SRC
+
