@@ -4,6 +4,9 @@
 - [[#file-operation-related][File operation related]]
 - [[#io-related][I/O related]]
 - [[#string-operation-related][String operation related]]
+- [[#sequence-operation-related][Sequence operation related]]
+- [[#dictionary-operation-related][Dictionary operation related]]
+- [[#misc][Misc]]
 
 * File operation related
   + Create the file if the specified file does not exist.
@@ -21,7 +24,7 @@
               pass
     #+END_SRC
 
-    Dependency: ~os~.
+    *Dependency:* ~os~.
 
   + Capture the func's stdout.
     #+BEGIN_SRC python
@@ -48,7 +51,7 @@
       out = func('alice')  # Hello alice
     #+END_SRC
     
-    Dependency: ~functools~, ~StringIO~ and ~sys~
+    **Dependency:** ~functools~, ~StringIO~ and ~sys~
 
 * I/O related
   + A wrapper of the input and output streams.
@@ -67,7 +70,7 @@
           return fp
     #+END_SRC
 
-    Dependency: ~io~
+    *Dependency:* ~io~
 
 * String operation related
   + Try converting a string to an integer.
@@ -156,3 +159,179 @@
       '测试字符串A'
     #+END_SRC
 
+* Sequence operation related
+  + Group seq by a specified size.
+    #+BEGIN_SRC python
+      def group(seq, size):
+          """Group the seq by size."""
+          def take(seq, n):
+              for i in range(n):
+                  yield next(seq)
+
+          seq = iter(seq)
+          while True:
+              x = list(take(seq, size))
+              if x:
+                  yield x
+              else:
+                  break
+    #+END_SRC
+
+    Use like this:
+    #+BEGIN_SRC python
+      >>> list(group([1, 2, 3, 4, 5, 6, 7], 2))
+      [[1, 2], [3, 4], [5, 6], [7]]
+    #+END_SRC
+
+  + Sequence deduplication while maintaining the original order.
+    #+BEGIN_SRC python
+      def uniq(seq, key=None):
+          """Sequence deduplication."""
+          key = key or (lambda x: x)
+          seen, result = set(), list()
+          for v in seq:
+              k = key(v)
+              if k in seen:
+                  continue
+              seen.add(k)
+              result.append(v)
+          return result
+    #+END_SRC
+
+    Use like this:
+    #+BEGIN_SRC python
+      >>> uniq([1,1,3,4,5,3,4])
+      [1, 3, 4, 5]
+    #+END_SRC
+
+  + Get the element at the specified position in the list,
+    does not exist to return the default value.
+    #+BEGIN_SRC python
+      def listget(lst, inx, default=None):
+          """Get the lst[inx], return to default if it does not exist."""
+          if (len(lst) - 1 < inx) or (-len(lst) > inx):
+              return default
+          return lst[inx]
+    #+END_SRC
+
+    Use like this:
+    #+BEGIN_SRC python
+      >>> listget([1, 2, 3], 4, 5)
+      5
+    #+END_SRC
+
+* Dictionary operation related
+  + Reverse dictionary key-value mapping.
+    #+BEGIN_SRC python
+      def dictreverse(mapping):
+          """reverse dict key and value."""
+          return {value: key for key, value in mapping.items()}
+    #+END_SRC
+
+  + Find the key of the specified element.
+    #+BEGIN_SRC python
+      def dictfind(dictionary, element):
+          """find the key's value is elemet"""
+          for key, value in dictionary.items():
+              if element is value:
+                  return key
+    #+END_SRC
+
+  + Look for all the keys that map the specified element.
+    #+BEGIN_SRC python
+      def dictfindall(dictionary, element):
+          """find all key's value is elemet"""
+          res = []
+          for (key, value) in iteritems(dictionary):
+              if element is value:
+                  res.append(key)
+          return res
+    #+END_SRC
+* Misc
+  + Limit the execution time of a function.
+    #+BEGIN_SRC python
+      def timelimit(timeout):
+          """
+          A `decorator` to limit a function to `timeout` seconds, raising `TimeoutError`
+          if it takes longer.
+
+          _Caveat:_ The function isn't stopped after `timeout` seconds but continues
+          executing in a separate thread. (There seems to be no way to kill a thread.)
+
+          inspired by <http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/473878>
+          """
+          def _1(function):
+              def _2(*args, **kw):
+                  class Dispatch(threading.Thread):
+                      def __init__(self):
+                          threading.Thread.__init__(self)
+                          self.result = None
+                          self.error = None
+
+                          self.setDaemon(True)
+                          self.start()
+
+                      def run(self):
+                          try:
+                              self.result = function(*args, **kw)
+                          except:
+                              self.error = sys.exc_info()
+
+                  c = Dispatch()
+                  c.join(timeout)
+                  if c.isAlive():
+                      raise RuntimeError('took too long')
+                  if c.error:
+                      raise c.error[1]
+                  return c.result
+              return _2
+          return _1
+    #+END_SRC
+    
+    *Dependency:* ~sys~, ~threading~.
+
+    Use like this:
+    #+BEGIN_SRC python
+      @timelimit(0.1)
+      def func():
+          while True:
+              pass
+
+      func()
+    #+END_SRC
+
+  + Simplified conditional judgment.
+    #+BEGIN_SRC python
+      def cond(predicate, consequence, alternative=None):
+          """Function replacement for if-else to use in expressions."""
+          if predicate:
+              return consequence
+          else:
+              return alternative
+    #+END_SRC
+
+    Use like this:
+    #+BEGIN_SRC python
+      >>> x = 2
+      >>> cond(x % 2 == 0, "even", "odd")
+      'even'
+      >>> cond(x % 2 == 0, "even", "odd") + '_row'
+      'even_row'
+    #+END_SRC
+
+  + Automatically set instance properties.
+    #+BEGIN_SRC python
+      def autoassign(self, locals):
+          """
+          Automatically assigns local variables to `self`.
+
+          Generally used in `__init__` methods, as in:
+
+              def __init__(self, foo, bar, baz=1):
+                  autoassign(self, locals())
+          """
+          for (key, value) in iteritems(locals):
+              if key == 'self':
+                  continue
+              setattr(self, key, value)
+    #+END_SRC
