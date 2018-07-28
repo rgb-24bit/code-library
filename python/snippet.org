@@ -51,7 +51,7 @@
       out = func('alice')  # Hello alice
     #+END_SRC
     
-    **Dependency:** ~functools~, ~StringIO~ and ~sys~
+    *Dependency:* ~functools~, ~StringIO~ and ~sys~
 
 * I/O related
   + A wrapper of the input and output streams.
