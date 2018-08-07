@@ -26,6 +26,26 @@
 
     *Dependency:* ~os~.
 
+  + Get the file that meets the rules in the specified directory.
+    #+BEGIN_SRC python
+      def directory_files(src, match=None):
+          """Get the file that meets the rules in the specified directory."""
+          match = match or (lambda x: True)
+
+          names = os.listdir(src)
+
+          for name in names:
+              if not match(name):
+                  continue
+
+              srcname = os.path.join(src, name)
+              if os.path.isdir(srcname):
+                  for fn in directory_files(srcname, match):
+                      yield fn
+              else:
+                  yield srcname
+    #+END_SRC
+  
   + Capture the func's stdout.
     #+BEGIN_SRC python
       def capture_stdout(func):
@@ -247,6 +267,7 @@
                   res.append(key)
           return res
     #+END_SRC
+
 * Misc
   + Limit the execution time of a function.
     #+BEGIN_SRC python
