@@ -19,3 +19,9 @@
       overflow: hidden;
     #+END_SRC
 
+  + Center the text up and down in the div.
+    #+BEGIN_SRC css
+      height: 20px;
+      line-height: 20px;
+    #+END_SRC
+
