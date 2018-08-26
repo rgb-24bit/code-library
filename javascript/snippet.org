@@ -1,3 +1,10 @@
 #+TITLE: Code snippet collection
 
 * Table of Contents                                       :TOC_4_gh:noexport:
+- [[#string-operation-related][String operation related]]
+
+* String operation related
+  + Anti-filter
+    #+BEGIN_SRC javascript
+      f = (s) => Array.from(s).join('\u2061')
+    #+END_SRC
