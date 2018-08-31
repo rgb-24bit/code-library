@@ -3,6 +3,7 @@
 * Table of Contents                                       :TOC_4_gh:noexport:
 - [[#integer-calculation-correlation][Integer calculation correlation]]
 - [[#pointer-operation-related][Pointer operation related]]
+- [[#floating-point-operation][Floating point operation]]
 
 * Integer calculation correlation
   + Judging whether an unsigned add operation overflows.
@@ -70,3 +71,26 @@
       }
     #+END_SRC
 
+* Floating point operation
+  + Rounding to the specified number of digits.
+    #+BEGIN_SRC C
+      #include <math.h>
+
+      double copysign(double x, double y) {
+        if (y > 0. || (y == 0. && atan2(y, -1.) > 0.)) {
+          return fabs(x);
+        } else {
+          return -fabs(x);
+        }
+      }
+
+      double round(double x) {
+        double absx, y;
+        absx = fabs(x);
+        y = floor(absx);
+        if (absx - y >= 0.5) {
+          y += 1.0;
+        }
+        return copysign(y, x);
+      }
+    #+END_SRC
