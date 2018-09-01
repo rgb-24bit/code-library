@@ -1,0 +1,37 @@
+#+TITLE: Code snippet collection
+
+* Table of Contents                                       :TOC_4_gh:noexport:
+- [[#file-operation-related][File operation related]]
+- [[#date-time-operation-related][Date time operation related]]
+
+* File operation related
+  + Read the text of the specified file
+    #+BEGIN_SRC elisp
+      (defun read-text-from-file (file-name &optional CODING-SYSTEM)
+        "Read the text of the specified file."
+        (setq CODING-SYSTEM (or CODING-SYSTEM 'utf-8))
+        (with-temp-buffer
+          (insert-file-contents-literally file-name)
+          (decode-coding-region (point-min) (point-max) CODING-SYSTEM t)))
+    #+END_SRC
+
+  + Write the text to the specified file
+    #+BEGIN_SRC elisp
+      (defun write-text-to-file (file-name contents &optional CODING-SYSTEM)
+        "Write the text to the specified file."
+        (setq CODING-SYSTEM (or CODING-SYSTEM 'utf-8))
+        (let ((coding-system-for-write 'binary))
+          (with-temp-file file-name
+            (set-buffer-multibyte nil)
+            (insert (encode-coding-string contents CODING-SYSTEM)))))
+    #+END_SRC
+
+* Date time operation related
+  + Insert datetime in the cursor
+    #+BEGIN_SRC elisp
+      (defun insert-datetime ()
+        "Insert datetime in the cursor."
+        (interactive)
+        (insert (format-time-string "%Y-%m-%d %l:%M:%S")))
+    #+END_SRC
+
