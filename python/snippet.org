@@ -73,6 +73,24 @@
     
     *Dependency:* ~functools~, ~StringIO~ and ~sys~
 
+  + Memory mapped file.
+    #+BEGIN_SRC python
+      def memory_map(filename, access=mmap.ACCESS_WRITE):
+          size = os.path.getsize(filename)
+          fd = os.open(filename, os.O_RDWR)
+          return mmap.mmap(fd, size, access=access)
+    #+END_SRC
+
+    Use like this:
+    #+BEGIN_SRC python
+      with open('data') as m:
+          ...
+    #+END_SRC
+
+    *Dependency:* ~os~ and ~mmap~.
+
+    See more: [[https://docs.python.org/3/library/mmap.html][mmap — Memory-mapped file support]].
+
 * I/O related
   + A wrapper of the input and output streams.
     #+BEGIN_SRC python
