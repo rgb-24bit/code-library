@@ -1,3 +1,20 @@
 #+TITLE: Code snippet collection
 
 * Table of Contents                                       :TOC_4_gh:noexport:
+- [[#file-operation-related][File operation related]]
+
+* File operation related
+  + Read all the contents of the file.
+    #+BEGIN_SRC java
+      // import java.io.IOException;
+      // import java.nio.file.Files;
+      // import java.nio.file.Paths;
+
+      public static String readAll(String filename, String charsetName) {
+        try {
+          return new String(Files.readAllBytes(Paths.get(filename)), charsetName);
+        } catch (IOException e) {
+          return null;
+        }
+      }
+    #+END_SRC

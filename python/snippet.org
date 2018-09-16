@@ -377,7 +377,7 @@
       >>> cond(x % 2 == 0, "even", "odd") + '_row'
       'even_row'
     #+END_SRC
-
+    
   + Automatically set instance properties.
     #+BEGIN_SRC python
       def autoassign(self, locals):
@@ -394,3 +394,18 @@
                   continue
               setattr(self, key, value)
     #+END_SRC
+
+  + Programming for stackoverflow.
+    #+BEGIN_SRC python
+      def stackoverflow(func):
+          @functools.wraps(func)
+          def wrapper(*args, **kwargs):
+              try:
+                  return func(*args, **kwargs)
+              except Exception as e:
+                  webbrowser.open('https://stackoverflow.com/search?q=' + str(e))
+          return wrapper
+    #+END_SRC
+
+    *Dependency:* ~functools~, ~webbrowser~.
+

@@ -8,3 +8,42 @@
     #+BEGIN_SRC javascript
       f = (s) => Array.from(s).join('\u2061')
     #+END_SRC
+
+  + Produces a function which uses template strings to do simple interpolation from objects
+    #+BEGIN_SRC javascript
+      var generateTemplateString = (function(){
+        var cache = {};
+
+        function generateTemplate(template){
+
+          var fn = cache[template];
+
+          if (!fn){
+
+            // Replace ${expressions} (etc) with ${map.expressions}.
+
+            var sanitized = template
+                .replace(/\$\{([\s]*[^;\s\{]+[\s]*)\}/g, function(_, match){
+                  return `\$\{map.${match.trim()}\}`;
+                })
+            // Afterwards, replace anything that's not ${map.expressions}' (etc) with a blank string.
+                .replace(/(\$\{(?!map\.)[^}]+\})/g, '');
+
+            fn = Function('map', `return \`${sanitized}\``);
+
+          }
+
+          return fn;
+        };
+
+        return generateTemplate;
+      })();
+    #+END_SRC
+
+    Use like this:
+    #+BEGIN_SRC javascript
+      var kingMaker = generateTemplateString('${name} is king!');
+
+      console.log(kingMaker({name: 'Bryan'}));
+      // Logs 'Bryan is king!' to the console.
+    #+END_SRC
