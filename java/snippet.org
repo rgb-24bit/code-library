@@ -2,6 +2,7 @@
 
 * Table of Contents                                       :TOC_4_gh:noexport:
 - [[#file-operation-related][File operation related]]
+- [[#misc][Misc]]
 
 * File operation related
   + Read all the contents of the file.
@@ -18,3 +19,14 @@
         }
       }
     #+END_SRC
+* Misc
+  + Similar to the as operation in CSharp.
+    #+BEGIN_SRC java
+      public static <T> T as(Class<T> clazz, Object o){
+        if(clazz.isInstance(o)){
+          return clazz.cast(o);
+        }
+        return null;
+      }
+    #+END_SRC
+  
