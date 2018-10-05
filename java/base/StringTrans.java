@@ -8,7 +8,7 @@ public class StringTrans {
   private Map<Character, Character> trans;
 
   /**
-   * You should create an instance using the {@link #maketrans(String, String)} method.
+   * You should create an instance using the {@link #maketrans(String, String) maketrans} method.
    * @param intab The string of characters to be replaced in the string.
    * @param outtab Corresponding string of mapped characters.
    */
@@ -24,6 +24,7 @@ public class StringTrans {
    * Create a StringTrans instance. The length of the incoming parameters must be equal.
    * @param intab The string of characters to be replaced in the string.
    * @param outtab Corresponding string of mapped characters.
+   * @return StringTrans instance.
    * @throws IllegalArgumentException If the parameter lengths are not equal.
    */
   public static StringTrans maketrans(String intab, String outtab) {
@@ -36,6 +37,7 @@ public class StringTrans {
   /**
    * Return a copy of the string origin in its each character has been mapped.
    * @param origin The string to be translated.
+   * @return Translated string.
    */
   public String translate(String origin) {
     StringBuilder sb = new StringBuilder(origin.length());
