@@ -19,6 +19,22 @@
         }
       }
     #+END_SRC
+
+  + Write all the contents to the file.
+    #+BEGIN_SRC java
+      // import java.io.IOException;
+      // import java.nio.file.Files;
+      // import java.nio.file.Paths;
+
+      public static void writeAll(String filename, String charsetName, String content) {
+        try {
+          Files.write(Path.get(filename), content.getBytes(charsetName));
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    #+END_SRC
+
 * Misc
   + Similar to the as operation in CSharp.
     #+BEGIN_SRC java
