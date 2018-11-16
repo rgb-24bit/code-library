@@ -3,6 +3,7 @@
 * Table of Contents                                       :TOC_4_gh:noexport:
 - [[#file-operation-related][File operation related]]
 - [[#date-time-operation-related][Date time operation related]]
+- [[#text-operation-related][Text operation related]]
 
 * File operation related
   + Read the text of the specified file
@@ -35,3 +36,20 @@
         (insert (format-time-string "%Y-%m-%d %l:%M:%S")))
     #+END_SRC
 
+* Text operation related
+  + Full-width and half-width character conversion
+    #+BEGIN_SRC elisp
+      (define-translation-table 'fullwidth-to-halfwidth
+        (let ((table (make-char-table 'translation-table)))
+          (cl-loop for fullwidth from #xFF01 to #xFF5E
+                   for halfwidth from #x21 to #x7E
+                   do (aset table fullwidth halfwidth))
+          table))
+
+      (define-translation-table 'halfwidth-to-fullwidth
+        (let ((table (make-char-table 'translation-table)))
+          (cl-loop for fullwidth from #xFF01 to #xFF5E
+                   for halfwidth from #x21 to #x7E
+                   do (aset table halfwidth fullwidth))
+          table))
+    #+END_SRC
