@@ -94,3 +94,10 @@
         return copysign(y, x);
       }
     #+END_SRC
+
+  + Get the binary form of a floating point number.
+    #+BEGIN_SRC C
+      unsigned float2binary(float x) {
+        return ((unsigned*)&x)[0];
+      }
+    #+END_SRC
