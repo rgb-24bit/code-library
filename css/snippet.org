@@ -2,26 +2,46 @@
 
 * Table of Contents                                       :TOC_4_gh:noexport:
 - [[#text-style][Text style]]
+- [[#interesting-style][Interesting style]]
 
 * Text style
   + Single line text overflow shows ellipsis.
     #+BEGIN_SRC css
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     #+END_SRC
 
   + Multi-line text overflow showing ellipsis.
     #+BEGIN_SRC css
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
+      div {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+      }
     #+END_SRC
 
   + Center the text up and down in the div.
     #+BEGIN_SRC css
-      height: 20px;
-      line-height: 20px;
+      div {
+        height: 20px;
+        line-height: 20px;
+      }
+    #+END_SRC
+
+* Interesting style
+  + Web page mirror flip implementation.
+    #+BEGIN_SRC html
+      .mirror_iframe {
+              -webkit-transform: scaleX(-1);
+              animation: mirror forwards 0s;
+              -moz-animation: mirror forwards 0s;
+              -webkit-animation: mirror forwards 0s;
+              -o-animation: mirror forwards 0s;
+            }
+
     #+END_SRC
 
