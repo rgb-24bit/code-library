@@ -2,6 +2,7 @@
 
 * Table of Contents                                       :TOC_4_gh:noexport:
 - [[#file-operation-related][File operation related]]
+- [[#text-operation-related][Text operation related]]
 - [[#misc][Misc]]
 
 * File operation related
@@ -61,6 +62,27 @@
     Use like this:
     #+BEGIN_SRC java
       String path = expandvars("${HOME}/.cache");
+    #+END_SRC
+
+* Text operation related
+  + Regular match all results
+    #+BEGIN_SRC java
+      import java.util.ArrayList;
+      import java.util.List;
+      import java.util.regex.Matcher;
+      import java.util.regex.Pattern;
+
+      public static List<String> findAll(Pattern pattern, String content) {
+        List<String> result = new ArrayList<>();
+
+        Matcher matcher = pattern.matcher(content);
+
+        while (matcher.find()) {
+          result.add(matcher.group());
+        }
+
+        return result;
+      }
     #+END_SRC
 
 * Misc
