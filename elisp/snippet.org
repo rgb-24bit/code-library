@@ -4,6 +4,7 @@
 - [[#file-operation-related][File operation related]]
 - [[#date-time-operation-related][Date time operation related]]
 - [[#text-operation-related][Text operation related]]
+- [[#utility-function][Utility function]]
 
 * File operation related
   + Read the text of the specified file
@@ -53,3 +54,26 @@
                    do (aset table halfwidth fullwidth))
           table))
     #+END_SRC
+* Utility function
+  + Rotate switching execution function
+    #+BEGIN_SRC elisp
+      (defun make-toggle-function (name &rest funs)
+        (lexical-let ((function-name name)
+                      (functions funs))
+          (defalias name
+            (function
+             (lambda ()
+               (interactive)
+               (let* ((index (mod (1+ (or (get function-name 'index) -1)) (length functions)))
+                      (next-function (nth index functions)))
+                 (call-interactively next-function)
+                 (put function-name 'index index)))))))
+    #+END_SRC
+
+    Use like this:
+    #+BEGIN_SRC elisp
+      (make-toggle-function
+       'outline-cycle
+       'outline-hide-leaves 'outline-hide-subtree 'outline-show-children 'outline-show-subtree)
+    #+END_SRC
+
