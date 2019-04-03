@@ -1,6 +1,0 @@
-#+TITLE: Code Library
-
-#+BEGIN_QUOTE
-This repository is used to hold some useful or interesting code that I have collected.
-#+END_QUOTE
-
