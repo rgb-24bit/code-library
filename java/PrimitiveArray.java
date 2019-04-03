@@ -1,4 +1,7 @@
-public class ArraysUtils {
+/**
+ * Conversion between primitive type array and corresponding wrapper class.
+ */
+public class PrimitiveArray {
   public static Integer[] toObject(int[] array) {
     Integer[] newArray = new Integer[array.length];
     for (int i = 0; i < array.length; ++i) {

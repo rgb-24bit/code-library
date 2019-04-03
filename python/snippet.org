@@ -1,4 +1,4 @@
-#+TITLE: Code snippet collection
+#+TITLE: Python Code snippet collection
 
 * Table of Contents                                       :TOC_4_gh:noexport:
 - [[#file-operation-related][File operation related]]

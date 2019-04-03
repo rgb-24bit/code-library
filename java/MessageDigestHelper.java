@@ -10,7 +10,7 @@ public class MessageDigestHelper {
    * MD5 digest on the specified string and return the hex digest string.
    * @param input The string to be MD5 digest.
    * @param charsetName Coded character set of a string.
-   * @return  Hex digest string. Error returning null.
+   * @return Hex digest string. Error returning null.
    */
   public static String md5(String input, String charsetName) {
     try {

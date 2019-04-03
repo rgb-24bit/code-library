@@ -1,4 +1,4 @@
-#+TITLE: Code snippet collection
+#+TITLE: Java code snippet collection
 
 * Table of Contents                                       :TOC_4_gh:noexport:
 - [[#file-operation-related][File operation related]]
@@ -13,12 +13,8 @@
       import java.nio.file.Files;
       import java.nio.file.Paths;
 
-      public static String readAll(String filename, String charsetName) {
-        try {
-          return new String(Files.readAllBytes(Paths.get(filename)), charsetName);
-        } catch (IOException e) {
-          return null;
-        }
+      public static String readAll(String filename, String charsetName) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(filename)), charsetName);
       }
     #+END_SRC
 
@@ -28,12 +24,9 @@
       import java.nio.file.Files;
       import java.nio.file.Paths;
 
-      public static void writeAll(String filename, String charsetName, String content) {
-        try {
-          Files.write(Path.get(filename), content.getBytes(charsetName));
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+      public static void writeAll(String filename, String charsetName, String content)
+          throws IOException {
+        Files.write(Path.get(filename), content.getBytes(charsetName));
       }
     #+END_SRC
 

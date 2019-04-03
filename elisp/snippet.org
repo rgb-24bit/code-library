@@ -1,4 +1,4 @@
-#+TITLE: Code snippet collection
+#+TITLE: Elisp code snippet collection
 
 * Table of Contents                                       :TOC_4_gh:noexport:
 - [[#file-operation-related][File operation related]]
@@ -54,6 +54,7 @@
                    do (aset table halfwidth fullwidth))
           table))
     #+END_SRC
+
 * Utility function
   + Rotate switching execution function
     #+BEGIN_SRC elisp
