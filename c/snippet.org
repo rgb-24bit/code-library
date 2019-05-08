@@ -63,6 +63,13 @@
       }
     #+END_SRC
 
+  + Round.
+    #+BEGIN_SRC C
+      int round(float f) {
+        return (int) (f + 0.5);
+      }
+    #+END_SRC
+
 * Pointer operation related
   + Get the byte distribution of the specified variable in memory.
     #+BEGIN_SRC C
