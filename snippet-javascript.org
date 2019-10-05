@@ -1,0 +1,11 @@
+#+TITLE: JavaScript code snippet collection
+
+* Table of Contents                                       :TOC_4_gh:noexport:
+- [[#string-operation-related][String operation related]]
+
+* String operation related
+  + Prevent filtering by adding characters of width 0 between characters
+    #+BEGIN_SRC javascript
+      f = (s) => Array.from(s).join('\u2061')
+    #+END_SRC
+
