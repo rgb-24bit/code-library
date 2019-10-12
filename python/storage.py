@@ -10,7 +10,7 @@ from collections import UserDict
 from threading import local as threadlocal
 
 
-class Storage(UserDict):
+class Storage(dict):
     """A Storage object is like a dictionary except `obj.foo` can be used
     in addition to `obj['foo']`.
     """
