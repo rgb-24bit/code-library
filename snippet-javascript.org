@@ -2,10 +2,55 @@
 
 * Table of Contents                                       :TOC_4_gh:noexport:
 - [[#string-operation-related][String operation related]]
+- [[#xpath][xpath]]
 
 * String operation related
   + Prevent filtering by adding characters of width 0 between characters
     #+BEGIN_SRC javascript
       f = (s) => Array.from(s).join('\u2061')
     #+END_SRC
+
+* xpath
+  + Get the xpath of the target element
+    #+begin_src js
+      /**
+       ,* Get the xpath of the target element
+       ,*
+       ,* @param element target dom element object
+       ,* @return xpath of the target element
+       ,*/
+      function getPathTo(element) {
+        if (element.tagName === 'HTML') {
+          return '/HTML'
+        }
+        if (element === document.body) {
+          return '/HTML/BODY'
+        }
+
+        let ix = 0
+        let siblings = element.parentNode.childNodes
+        for (let i = 0; i < siblings.length; i++) {
+          let sibling = siblings[i]
+          if (sibling === element) {
+            return getPathTo(element.parentNode) + '/' + element.tagName + '[' + (ix + 1) + ']'
+          }
+          if (sibling.nodeType === 1 && sibling.tagName === element.tagName) {
+            ix++
+          }
+        }
+      }
+    #+end_src
+
+    Example:
+    #+begin_src js
+      function mark(element) {
+        let result = document.evaluate(getPathTo(element), document)
+        for (let node = result.iterateNext(); node !== null; node = result.iterateNext()) {
+          node.style.outline = '3px solid #' + (~~(Math.random() * (1 << 24))).toString(16)
+        }
+      }
+    #+end_src
+
+    Reference:
+    + [[https://stackoverflow.com/questions/2631820/how-do-i-ensure-saved-click-coordinates-can-be-reloaed-to-the-same-place-even-i/2631931#2631931][javascript - How do I ensure saved click coordinates can be reloaed to the same place, even if the page layout changed? - Stack Overflow]]
 
