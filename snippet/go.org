@@ -1,0 +1,34 @@
+#+TITLE:      Go code snippet collection
+
+* 目录                                                    :TOC_4_gh:noexport:
+- [[#open-opens-the-specified-url-in-the-default-browser-of-the-user][Open opens the specified URL in the default browser of the user]]
+- [[#determine-whether-a-file-exists][Determine whether a file exists]]
+
+* Open opens the specified URL in the default browser of the user
+  #+begin_src go
+    func Open(url string) error {
+      var cmd string
+      var args []string
+
+      switch runtime.GOOS {
+      case "windows":
+        cmd = "cmd"
+        args = []string{"/c", "start"}
+      case "darwin":
+        cmd = "open"
+      default: // "linux", "freebsd", "openbsd", "netbsd"
+        cmd = "xdg-open"
+      }
+      args = append(args, url)
+      return exec.Command(cmd, args...).Start()
+    }
+  #+end_src
+
+* Determine whether a file exists
+  #+begin_src go
+    func IsExist(path string) bool {
+      _, err := os.Lstat(path)
+      return !os.IsNotExist(err)
+    }
+  #+end_src
+
