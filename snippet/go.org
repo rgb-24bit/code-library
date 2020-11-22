@@ -3,6 +3,7 @@
 * 目录                                                    :TOC_4_gh:noexport:
 - [[#open-opens-the-specified-url-in-the-default-browser-of-the-user][Open opens the specified URL in the default browser of the user]]
 - [[#determine-whether-a-file-exists][Determine whether a file exists]]
+- [[#provide-interfaces-to-modify-the-default-configuration][Provide interfaces to modify the default configuration]]
 
 * Open opens the specified URL in the default browser of the user
   #+begin_src go
@@ -32,3 +33,26 @@
     }
   #+end_src
 
+* Provide interfaces to modify the default configuration
+  #+begin_src go
+    type Option func(cfg *Config) error
+
+    type Config struct {}
+
+    func WithOption(val string) Option {
+      return func(cfg *Config) error {
+        return nil
+      }
+    }
+
+    func New(options ...Option) *Config {
+      cfg := &Config{}
+      for _, option := range options {
+        if err := option(cfg); err != nil {
+          panic(err)
+        }
+      }
+      return cfg
+    }
+  #+end_src
+  
