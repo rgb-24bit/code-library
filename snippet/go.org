@@ -4,6 +4,7 @@
 - [[#open-opens-the-specified-url-in-the-default-browser-of-the-user][Open opens the specified URL in the default browser of the user]]
 - [[#determine-whether-a-file-exists][Determine whether a file exists]]
 - [[#provide-interfaces-to-modify-the-default-configuration][Provide interfaces to modify the default configuration]]
+- [[#regular-match][Regular match]]
 
 * Open opens the specified URL in the default browser of the user
   #+begin_src go
@@ -55,4 +56,42 @@
       return cfg
     }
   #+end_src
-  
+
+* Regular match
+  #+begin_src go
+    type Match struct {
+      Matched   string
+      Group     int
+      GroupName string
+    }
+
+    func Scanner(pattern, text string) []*Match {
+      reg := regexp.MustCompile(pattern)
+
+      res := make([]*Match, 0)
+      grp := reg.SubexpNames()
+
+      for _, matched := range reg.FindAllStringSubmatch(text, -1) {
+        for i, match := range matched {
+          if i > 0 && match != "" {
+            res = append(res, &Match{Matched: match, Group: i, GroupName: grp[i]})
+          }
+        }
+      }
+
+      return res
+    }
+  #+end_src
+
+  Example:
+  #+begin_src go
+    matches := Scanner(`(?P<NAME>[a-zA-Z_][a-zA-Z_0-9]*)|(?P<NUM>\d+)|(?P<EQ>=)|(?P<WS>\s+)`, "num = 10")
+    bytes, _ := json.Marshal(matches)
+    fmt.Println(string(bytes))
+  #+end_src
+
+  Result:
+  #+begin_example
+    [{"Matched":"num","Group":1,"GroupName":"NAME"},{"Matched":" ","Group":4,"GroupName":"WS"},{"Matched":"=","Group":3,"GroupName":"EQ"},{"Matched":" ","Group":4,"GroupName":"WS"},{"Matched":"10","Group":2,"GroupName":"NUM"}]
+  #+end_example
+
