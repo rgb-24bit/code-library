@@ -3,17 +3,17 @@
 // Example:
 //
 // func main() {
-// 	   var uri = MakeDsn("uri", "[scheme://]host[:port]path[?query][#fragment]", map[string]string{
-// 	   	  "scheme":   `\w+`,
-// 	   	  "host":     `[\w.]+`,
-// 	   	  "port":     `\d+`,
-// 	   	  "path":     `[\w/.]+`,
-// 	   	  "query":    `[^#]+`,
-//   	  "fragment": `.+`,
-// 	   })
+//     var uri = MakeDsn("uri", "[scheme://]host[:port]path[?query][#fragment]", map[string]string{
+//         "scheme":   `\w+`,
+//         "host":     `[\w.]+`,
+//         "port":     `\d+`,
+//         "path":     `[\w/.]+`,
+//         "query":    `[^#]+`,
+//         "fragment": `.+`,
+//     })
 //
-// 	   var res = uri.Parse("https://www.google.com/search?q=dsn&oq=dsn&aqs=chrome.0.69i59l4j0i131i433j69i61j69i60l2.935j0j7&sourceid=chrome&ie=UTF-8")
-// 	   fmt.Println(res)
+//     var res = uri.Parse("https://www.google.com/search?q=dsn&oq=dsn&aqs=chrome.0.69i59l4j0i131i433j69i61j69i60l2.935j0j7&sourceid=chrome&ie=UTF-8")
+//     fmt.Println(res)
 // }
 //
 // output:
@@ -98,7 +98,6 @@ func (p *Parser) Parse(text string) (map[string]string, string) {
 	var base = text
 
 	for _, optParser := range p.OptParsers {
-
 		switch optParser.Type {
 		case TypeName, TypeSep:
 			matched := optParser.Pattern.FindString(text)
