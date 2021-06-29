@@ -5,6 +5,7 @@
 - [[#determine-whether-a-file-exists][Determine whether a file exists]]
 - [[#provide-interfaces-to-modify-the-default-configuration][Provide interfaces to modify the default configuration]]
 - [[#regular-match][Regular match]]
+- [[#slice-chunking][Slice chunking]]
 
 * Open opens the specified URL in the default browser of the user
   #+begin_src go
@@ -94,4 +95,25 @@
   #+begin_example
     [{"Matched":"num","Group":1,"GroupName":"NAME"},{"Matched":" ","Group":4,"GroupName":"WS"},{"Matched":"=","Group":3,"GroupName":"EQ"},{"Matched":" ","Group":4,"GroupName":"WS"},{"Matched":"10","Group":2,"GroupName":"NUM"}]
   #+end_example
+
+* Slice chunking
+  #+begin_src go
+    func chunk(slice []string, size int) [][]string {
+      var result = make([][]string, 0, len(slice) / size)
+
+      for i := 0; i < len(slice); i += size {
+        end := i + size
+
+        if end > len(slice) {
+          end = len(slice)
+        }
+
+        result = append(result, slice[i:end])
+      }
+
+      return result
+    }
+  #+end_src
+  
+  Ref: [[https://stackoverflow.com/questions/35179656/slice-chunking-in-go][Slice chunking in Go - Stack Overflow]]
 
