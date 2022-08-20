@@ -6,6 +6,8 @@
 - [[#provide-interfaces-to-modify-the-default-configuration][Provide interfaces to modify the default configuration]]
 - [[#regular-match][Regular match]]
 - [[#slice-chunking][Slice chunking]]
+- [[#generic-trick][Generic trick]]
+- [[#generate-a-random-string-of-a-fixed-length][Generate a random string of a fixed length]]
 
 * Open opens the specified URL in the default browser of the user
   #+begin_src go
@@ -114,6 +116,72 @@
       return result
     }
   #+end_src
-  
+
   Ref: [[https://stackoverflow.com/questions/35179656/slice-chunking-in-go][Slice chunking in Go - Stack Overflow]]
 
+* Generic trick
+  #+begin_src go
+    package main
+
+    import "fmt"
+
+    type Event[T any] struct {
+      Payload T
+    }
+
+    type Callback[T any] func(Event[T])
+
+    var (
+      registry = make(map[string]Callback[any])
+    )
+
+    func Register[T any](ev string, cb Callback[T]) {
+      registerAny(ev, func(e Event[any]) {
+        cb(Event[T]{
+          Payload: e.Payload.(T),
+        })
+      })
+    }
+
+    func registerAny(ev string, cb Callback[any]) {
+      registry[ev] = cb
+    }
+
+    func main() {
+      Register("tick", func(e Event[int]) { fmt.Printf("%d", e.Payload) })
+    }
+
+  #+end_src
+
+
+* Generate a random string of a fixed length
+  #+begin_src go
+    const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    const (
+        letterIdxBits = 6                    // 6 bits to represent a letter index
+        letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
+        letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
+    )
+
+    var src = rand.NewSource(time.Now().UnixNano())
+
+    func RandStringBytesMaskImprSrcUnsafe(n int) string {
+        b := make([]byte, n)
+        // A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
+        for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
+            if remain == 0 {
+                cache, remain = src.Int63(), letterIdxMax
+            }
+            if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+                b[i] = letterBytes[idx]
+                i--
+            }
+            cache >>= letterIdxBits
+            remain--
+        }
+
+        return *(*string)(unsafe.Pointer(&b))
+    }
+  #+end_src
+
+  Ref [[https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go][How to generate a random string of a fixed length in Go? - Stack Overflow]]
